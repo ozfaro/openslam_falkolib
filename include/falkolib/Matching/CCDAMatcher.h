@@ -23,6 +23,7 @@
 #include <iostream>
 #include <falkolib/Matching/Matcher.h>
 #include <mcqd/mcqd.h>
+#include <type_traits>
 
 namespace falkolib {
 
@@ -41,7 +42,9 @@ namespace falkolib {
      *  http://www.dharwadker.org/clique/
      *  http://www.sanfoundry.com/cpp-program-find-maximum-size-clique-graph/
      *  http://www.sicmm.org/~konc/maxclique/mcqd/mcqd.h
+     * 
      */
+
     template <typename T = Keypoint, typename D = Descriptor>
     class CCDAMatcher : public Matcher<T> {
     public:
@@ -70,6 +73,8 @@ namespace falkolib {
             int i;
             int j;
             double dist;
+            Constraint() : i(0), j(0), dist(0.0) {}
+            Constraint(int _i, int _j, double _dist) : i(_i), j(_j), dist(_dist) {}
 
             bool operator<(const Constraint& c) const {
                 return (dist < c.dist);
@@ -92,7 +97,7 @@ namespace falkolib {
 
         /** Computes the value 
          */
-        int match(const std::vector<T>& v1, const std::vector<T>& v2, std::vector<std::pair<int, int> >& match) {
+        int match(const std::vector<T>& v1, const std::vector<T>& v2, std::vector<std::pair<int, int> >& match, bool use_descriptor_distances = false) {
             std::vector<Node> nodes;
             std::vector<std::pair<int, int> > edges;
             std::vector<Constraint> constraints1;
@@ -183,15 +188,34 @@ namespace falkolib {
         void makeRelativeConstraints(const std::vector<T>& points, std::vector<Constraint>& constraints) {
             Constraint constraint;
             int n = points.size();
+            constraints.reserve(constraints.size() + n*(n-1));
             for (int i = 0; i < n; ++i) {
                 for (int j = i + 1; j < n; ++j) {
-                    constraint.i = i;
-                    constraint.j = j;
-                    constraint.dist = points[i].distance(points[j]);
-                    constraints.push_back(constraint);
+                    if(i == j)
+                    {
+                        continue;
+                    }
+                    
+                    constraints.emplace_back(Constraint(i, j, calculate_distance(points[i], points[j])));
                 }
             }
             std::sort(constraints.begin(), constraints.end());
+        }
+
+        template <typename T_ = T> 
+        double calculate_distance(const T& point1, const T& point2, typename std::enable_if_t<!is_shared_ptr<T_>::value, std::nullptr_t> = nullptr)
+        {
+            return point1.distance(point2);
+        }
+        template <typename T_ = T>  
+        double calculate_distance(const T& point1, const T& point2, typename std::enable_if_t<is_shared_ptr<T_>::value, std::nullptr_t> = nullptr)
+        {
+            return point1->distance(*point2);
+        }  
+
+        static double calculate_geometric_distance(const T& point1, const T& point2)
+        {
+            return point1.geometric_distance(point2);
         }
 
         void findCliqueDyn(const std::vector<Node>& nodes, std::vector<int>& cliqueMax) {

@@ -42,6 +42,11 @@ namespace falkolib {
 		 */
 		CGH(double _radius, int _circularSectorNumber);
 		
+		CGH(double _radius, const std::vector<double> _histogram);
+		CGH(double _radius, std::vector<double>&& _histogram);
+
+		CGH() = default;
+
 		/**
 		 * @brief Compute distance between two descriptors
 		 * @param desc descriptor to measure distance
@@ -66,6 +71,10 @@ namespace falkolib {
 		 */
 		void compute(std::vector<Point2d>& neigh, int centralPointIndex);
 		
+
+		std::vector<double> get_histogram() const;
+
+		double get_radius() const;
 	private:
 		std::vector<double> histogram;
 		int circularSectorNumber;

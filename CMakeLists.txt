@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 2.8) 
 project(falkolib)
 set(CMAKE_BUILD_TYPE Release)
-add_definitions(-std=c++0x)   # Enabling c++11
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 SET(falkolib_RUNTIME_OUTPUT_DIRECTORY ${falkolib_SOURCE_DIR}/bin CACHE PATH "Target for the binaries")
 SET(falkolib_LIBRARY_OUTPUT_DIRECTORY ${falkolib_SOURCE_DIR}/lib CACHE PATH "Target for the libraries")
@@ -68,7 +69,7 @@ FILE(GLOB headers_Matching "${CMAKE_CURRENT_SOURCE_DIR}/include/falkolib/Matchin
 INSTALL(FILES ${headers_Common} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/falkolib/Common)
 INSTALL(FILES ${headers_Feature} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/falkolib/Feature)
 INSTALL(FILES ${headers_Matching} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/falkolib/Matching)
-
+INSTALL(FILES ${falkolib_SOURCE_DIR}/EXTERNAL/mcqd/mcqd.h ${falkolib_SOURCE_DIR}/EXTERNAL/mcqd/mcqd.cpp DESTINATION ${CMAKE_INSTALL_PREFIX}/include/mcqd)
 # Option "make install": copy cmake script
 FILE(GLOB cmake_script "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/falkolibConfig.cmake")
 message(STATUS "cmake_script " ${cmake_script})

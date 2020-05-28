@@ -40,5 +40,9 @@ namespace falkolib {
 		inline double distance(const Keypoint& desc) const {
 			return (point - desc.point).norm();
 		}
+
+		inline double geometric_distance(const Keypoint& desc) const {
+			return  distance(desc);
+		}
 	};
 }

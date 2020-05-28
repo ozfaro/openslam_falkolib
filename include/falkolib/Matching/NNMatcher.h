@@ -48,7 +48,7 @@ namespace falkolib {
 		 * @param match matching vector representing associations, pair.first corresponds to v1 and pair.second corresponds to v2
 		 * @return number of valid association in match
 		 */
-		int match(const std::vector<T>& v1, const std::vector<T>& v2, std::vector<std::pair<int, int> >& match) {
+		int match(const std::vector<T>& v1, const std::vector<T>& v2, std::vector<std::pair<int, int> >& match, bool use_descriptor_distances = false) {
 			match.clear();
 			int imin;
 			double dmin, d;

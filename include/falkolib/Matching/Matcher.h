@@ -20,7 +20,11 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
+template<typename Type> struct is_shared_ptr : std::false_type {};
+template<typename Type> struct is_shared_ptr<std::shared_ptr<Type>> : std::true_type {};
+	
 namespace falkolib {
 	
 	/**
@@ -37,6 +41,8 @@ namespace falkolib {
 		 * @param match matching vector representing associations, pair.first corresponds to v1 and pair.second corresponds to v2
 		 * @return number of valid association in match
 		 */
-		virtual int match(const std::vector<T>& v1, const std::vector<T>& v2, std::vector<std::pair<int, int> >& match) = 0;
+		virtual int match(const std::vector<T>& v1, const std::vector<T>& v2, std::vector<std::pair<int, int> >& match, bool use_descriptor_distances = false) = 0;
+
+
 	};
 }

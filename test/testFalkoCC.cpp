@@ -30,6 +30,7 @@
 #include <falkolib/Matching/CCDAMatcher.h>
 
 #include "testData.h"
+#include <memory>
 
 using namespace std;
 using namespace falkolib;
@@ -95,6 +96,8 @@ int main(int argc, char** argv) {
 			std::cout << "i1: " << i1 << "\ti2: " << i2 << "\t keypoints distance: " << (keypoints1[i1].distance(keypoints2[i2])) << endl;
 		}
 	}
+
+	CCDAMatcher<std::shared_ptr<FALKO>> cc2;
 	
 //	Eigen::Affine2d transformNN;
 //	Eigen::Affine2d transformCC;
