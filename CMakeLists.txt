@@ -1,77 +1,75 @@
-cmake_minimum_required(VERSION 2.8) 
-project(falkolib)
+cmake_minimum_required(VERSION 2.8.3)
+project(falko_lib)
+
+# We are new school bot not so new school to use 17
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#add_compile_options(-Wall)
 
-SET(falkolib_RUNTIME_OUTPUT_DIRECTORY ${falkolib_SOURCE_DIR}/bin CACHE PATH "Target for the binaries")
-SET(falkolib_LIBRARY_OUTPUT_DIRECTORY ${falkolib_SOURCE_DIR}/lib CACHE PATH "Target for the libraries")
-SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${falkolib_LIBRARY_OUTPUT_DIRECTORY})
-SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${falkolib_LIBRARY_OUTPUT_DIRECTORY})
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${falkolib_RUNTIME_OUTPUT_DIRECTORY})
-LIST(APPEND CMAKE_MODULE_PATH ${falkolib_SOURCE_DIR}/cmake_modules)
-
-message(STATUS "CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
-
-find_package(Boost)  
-if (${Boost_FOUND})
-  message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
-  message(STATUS "Boost_LIBRARY_DIRS: ${Boost_LIBRARY_DIRS}")
-  message(STATUS "Boost_LIBRARIES: ${Boost_LIBRARY_DIRS}")
-  include_directories(${Boost_INCLUDE_DIRS})
-  link_directories(${Boost_LIBRARY_DIRS})
-endif(${Boost_FOUND})
-
-find_package(Eigen3 REQUIRED)
-if (${EIGEN3_FOUND})
-  include_directories(${EIGEN3_INCLUDE_DIR})
-  message(STATUS "EIGEN3_INCLUDE_DIR: ${EIGEN3_INCLUDE_DIR}")
-else(${EIGEN3_FOUND})
-  message(WARNING "Cannot find Eigen3 Library")
-endif(${EIGEN3_FOUND})
-
-message(STATUS "include dir: ${falkolib_SOURCE_DIR}/include")
-message(STATUS "include dir: ${falkolib_SOURCE_DIR}/EXTERNAL")
-include_directories(${falkolib_SOURCE_DIR}/include ${falkolib_SOURCE_DIR}/EXTERNAL)  
-
-add_library(falkolib 
-  src/Common/HoughSpectrum.cpp
-  src/Feature/FALKOExtractor.cpp
-  src/Feature/OCExtractor.cpp
-  src/Feature/CGH.cpp
-  src/Feature/BSC.cpp
+## Find catkin macros and libraries
+## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
+## is used, also find other catkin packages
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
 )
 
-add_executable(testKeypointFalko test/testKeypointFalko.cpp test/testData.cpp)
-target_link_libraries(testKeypointFalko falkolib ${Boost_LIBRARIES})
-
-add_executable(testFalkoAHT test/testFalkoAHT.cpp test/testData.cpp)
-target_link_libraries(testFalkoAHT falkolib ${Boost_LIBRARIES})
-
-add_executable(testFalkoCC test/testFalkoCC.cpp test/testData.cpp)
-target_link_libraries(testFalkoCC falkolib ${Boost_LIBRARIES})
-
-add_executable(testKeypointOC test/testKeypointOC.cpp test/testData.cpp)
-target_link_libraries(testKeypointOC falkolib ${Boost_LIBRARIES}) # boost_iostreams boost_system boost_filesystem
+## System dependencies are found with CMake's conventions
+#find_package(Boost REQUIRED COMPONENTS system)
+#find_package(Qt4 COMPONENTS QtCore QtGui)
+#include(${QT_USE_FILE})
 
 
-# Option "make install": copy binaries
-INSTALL(TARGETS falkolib 
-  RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-  LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+###################################
+## catkin specific configuration ##
+###################################
+## The catkin_package macro generates cmake config files for your package
+## Declare things to be passed to dependent projects
+## INCLUDE_DIRS: uncomment this if you package contains header files
+## LIBRARIES: libraries you create in this project that dependent projects also need
+## CATKIN_DEPENDS: catkin_packages dependent projects also need
+## DEPENDS: system dependencies of this project that dependent projects also need
+
+include(build_falko_lib.cmake)
+
+
+catkin_package(
+  CATKIN_DEPENDS roscpp
+  INCLUDE_DIRS include EXTERNAL
+  LIBRARIES ${PROJECT_NAME}
+#  CATKIN_DEPENDS dynamic_reconfigure nav_msgs roscpp rospy std_msgs
+#  DEPENDS system_lib
 )
 
-# Option "make install": copy headers
-FILE(GLOB headers_Common "${CMAKE_CURRENT_SOURCE_DIR}/include/falkolib/Common/*.h")
-FILE(GLOB headers_Feature "${CMAKE_CURRENT_SOURCE_DIR}/include/falkolib/Feature/*.h")
-FILE(GLOB headers_Matching "${CMAKE_CURRENT_SOURCE_DIR}/include/falkolib/Matching/*.h")
-INSTALL(FILES ${headers_Common} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/falkolib/Common)
-INSTALL(FILES ${headers_Feature} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/falkolib/Feature)
-INSTALL(FILES ${headers_Matching} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/falkolib/Matching)
-INSTALL(FILES ${falkolib_SOURCE_DIR}/EXTERNAL/mcqd/mcqd.h ${falkolib_SOURCE_DIR}/EXTERNAL/mcqd/mcqd.cpp DESTINATION ${CMAKE_INSTALL_PREFIX}/include/mcqd)
-# Option "make install": copy cmake script
-FILE(GLOB cmake_script "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/falkolibConfig.cmake")
-message(STATUS "cmake_script " ${cmake_script})
-INSTALL(FILES ${cmake_script} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/falkolib/)
+###########
+## Build ##
+###########
+## Specify additional locations of header files
+## Your package locations should be listed before other locations
+# include_directories(include)
 
+
+
+#############
+## Install ##
+#############
+
+# all install targets should use catkin DESTINATION variables
+# See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
+
+## Mark executable scripts (Python etc.) for installation
+## in contrast to setup.py, you can choose the destination
+# install(PROGRAMS
+#   scripts/my_python_script
+#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+# )
+
+## Mark executables and/or libraries for installation
+install(TARGETS ${PROJECT_NAME}
+   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(DIRECTORY include/${PROJECT_NAME}/ EXTERNAL
+        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})

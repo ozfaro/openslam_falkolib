@@ -17,8 +17,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with FALKOLib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <falkolib/Feature/BSC.h>
-#include <falkolib/Common/GeomUtils.h>
+#include <falko_lib/Feature/BSC.h>
+#include <falko_lib/Common/GeomUtils.h>
 #include <limits>
 #include <math.h>
 #include <assert.h>

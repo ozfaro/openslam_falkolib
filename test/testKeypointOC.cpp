@@ -18,16 +18,16 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with FALKOLib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <falkolib/Feature/OC.h>
-#include <falkolib/Feature/CGH.h>
-#include <falkolib/Feature/BSC.h>
+#include <falko_lib/Feature/OC.h>
+#include <falko_lib/Feature/CGH.h>
+#include <falko_lib/Feature/BSC.h>
 
-#include <falkolib/Feature/OCExtractor.h>
-#include <falkolib/Feature/BSCExtractor.h>
-#include <falkolib/Feature/CGHExtractor.h>
+#include <falko_lib/Feature/OCExtractor.h>
+#include <falko_lib/Feature/BSCExtractor.h>
+#include <falko_lib/Feature/CGHExtractor.h>
 
-#include <falkolib/Matching/NNMatcher.h>
-#include <falkolib/Matching/CCDAMatcher.h>
+#include <falko_lib/Matching/NNMatcher.h>
+#include <falko_lib/Matching/CCDAMatcher.h>
 
 #include "testData.h"
 

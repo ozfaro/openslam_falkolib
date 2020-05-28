@@ -20,14 +20,14 @@
 #include <iostream>
 
 
-#include <falkolib/Feature/FALKO.h>
-#include <falkolib/Feature/BSC.h>
-#include <falkolib/Feature/FALKOExtractor.h>
+#include <falko_lib/Feature/FALKO.h>
+#include <falko_lib/Feature/BSC.h>
+#include <falko_lib/Feature/FALKOExtractor.h>
 
-#include <falkolib/Feature/BSCExtractor.h>
+#include <falko_lib/Feature/BSCExtractor.h>
 
-#include <falkolib/Matching/NNMatcher.h>
-#include <falkolib/Matching/AHTMatcher.h>
+#include <falko_lib/Matching/NNMatcher.h>
+#include <falko_lib/Matching/AHTMatcher.h>
 
 #include "testData.h"
 

@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with FALKOLib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <falkolib/Feature/FALKOExtractor.h>
+#include <falko_lib/Feature/FALKOExtractor.h>
 
 using namespace std;
 
