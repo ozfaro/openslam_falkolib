@@ -75,12 +75,16 @@ namespace falkolib {
 		std::vector<double> get_histogram() const;
 
 		double get_radius() const;
+
+		bool valid() const;
+
 	private:
 		std::vector<double> histogram;
 		int circularSectorNumber;
 		double sectorResolution;
 		double radius;
-		
+		bool valid_;
+
 		/** @brief compute the Chi-squared distance between two histograms*/
 		double SymmetricChiSquaredDistance(const std::vector<double>& h1, const std::vector<double>& h2) const;
 	};

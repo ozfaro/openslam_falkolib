@@ -30,23 +30,27 @@ using namespace std;
 
 namespace falkolib {
 
-	CGH::CGH(double _radius, int _circularSectorNumber) {
+	CGH::CGH(double _radius, int _circularSectorNumber) : valid_(false) {
 		radius = _radius;
 		circularSectorNumber = _circularSectorNumber;
 		sectorResolution = 2.0 * M_PI / circularSectorNumber;
 	}
 
-	CGH::CGH(double _radius, const std::vector<double> _histogram) : radius(_radius), circularSectorNumber(histogram.size()), sectorResolution(2.0 * M_PI / histogram.size()), histogram(_histogram)
+	CGH::CGH(double _radius, const std::vector<double> _histogram) : radius(_radius), circularSectorNumber(histogram.size()), sectorResolution(2.0 * M_PI / histogram.size()), histogram(_histogram), valid_(false)
 	{
 
 	}
-	CGH::CGH(double _radius, std::vector<double>&& _histogram) : radius(_radius), circularSectorNumber(histogram.size()), sectorResolution(2.0 * M_PI / histogram.size()), histogram(_histogram)
+	CGH::CGH(double _radius, std::vector<double>&& _histogram) : radius(_radius), circularSectorNumber(histogram.size()), sectorResolution(2.0 * M_PI / histogram.size()), histogram(_histogram), valid_(false)
 	{
 
 	}
 
 	void CGH::compute(std::vector<Point2d>& neigh, int centralPointIndex) {
 		const int size = neigh.size();
+		if(size >= 7)
+		{
+			valid_ = true;
+		}
 		histogram.resize(circularSectorNumber, 0);
 		for (int i = 0; i < size; ++i) {
 			if (i != centralPointIndex) {
@@ -112,5 +116,10 @@ namespace falkolib {
 	double CGH::get_radius() const
 	{
 		return radius;
+	}
+
+	bool CGH::valid() const
+	{
+		return valid_;
 	}
 }
